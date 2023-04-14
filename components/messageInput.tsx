@@ -13,7 +13,11 @@ import {
 } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 
-export function MessageInput() {
+export function MessageInput({
+  submit,
+}: {
+  submit: (message: string) => void
+}) {
   const theme = useMantineTheme()
 
   const form = useForm({
@@ -22,16 +26,21 @@ export function MessageInput() {
     },
   })
 
+  const focusTrapRef = useFocusTrap()
+
   return (
     <form
-      onSubmit={form.onSubmit(values => {form.reset(); sendMessage(values.message)})}
+      onSubmit={form.onSubmit(values => {
+        form.reset()
+        submit(values.message)
+      })}
       style={{ position: 'fixed', bottom: '10px', left: '50%', width: '100%' }}
       autoComplete='off'
     >
       <TextInput
         w={'calc(100% - 12.5rem)'}
-        // miw={200}
         maw={700}
+        ref={focusTrapRef}
         radius='xl'
         size='md'
         style={{ transform: 'translate(-50%,-50%)' }}
@@ -43,7 +52,6 @@ export function MessageInput() {
             color={theme.primaryColor}
             variant='filled'
             type='submit'
-            // onClick={() => sendMessage()}
           >
             {theme.dir === 'ltr' ? (
               <IconArrowRight size='1.1rem' stroke={1.5} />
