@@ -43,7 +43,7 @@ export default function Message({
           w='max-content'
           maw='35%'
         >
-          {loading ? <Loader size={21} variant='bars' /> : <Text>
+          {loading ? <Loader size={21} variant='bars' /> : <Text style={{overflowWrap: 'break-word'}}>
             {message}
             {typing ? (
               <span

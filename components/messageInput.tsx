@@ -34,7 +34,7 @@ export function MessageInput({
         form.reset()
         submit(values.message)
       })}
-      style={{ position: 'fixed', bottom: '10px', left: '50%', width: '100%' }}
+      style={{ position: 'fixed', bottom: '10px', left: '50%', width: '100%', transform: 'translate(-50%,-50%)' }}
       autoComplete='off'
     >
       <TextInput
@@ -43,7 +43,7 @@ export function MessageInput({
         ref={focusTrapRef}
         radius='xl'
         size='md'
-        style={{ transform: 'translate(-50%,-50%)' }}
+        style={{ margin: '0 auto' }}
         autoComplete='off'
         rightSection={
           <ActionIcon

@@ -13,16 +13,11 @@ export default function Chat() {
     {
       author: 'user' | 'robot'
       message: string
+      error?: string
       typing?: boolean
       loading?: boolean
     }[]
   >([])
-
-  useEffect(() => {
-    fetch('/api/chat/31aab45d-7167-4be8-827d-88069d61279b').then(res =>
-      res.json()
-    )
-  }, [])
 
   const router = useRouter()
 
@@ -32,27 +27,30 @@ export default function Chat() {
     '/api/chat/' + router.query.id,
     fetcher
   )
+  // const { data: test } = useSWR(
+  //   '/api/chat/' + router.query.id + '/question?prompt=Tell+me+about+the+James+Webb+Space+Telescope',
+  //   fetcher
+  // )
   var tempMessages: any[] = []
   useEffect(() => {
-    if(messages != null && !isLoading && data != null) {
-       data.questions.map(
-          (
-            current: { _id: string; question: string; answer: string },
-          ) => {
-            tempMessages = [
-              ...tempMessages,
-              { author: 'user', message: current.question },
-              { author: 'robot', message: current.answer },
-            ]
-          }
-        );
-        setMessages(tempMessages);
-        console.log('Mapped!');
+    if (messages != null && !isLoading && data != null) {
+      data.questions?.map(
+        (current: {
+          _id: string
+          question: string
+          answer: string
+          error?: string
+        }) => {
+          tempMessages = [
+            ...tempMessages,
+            { author: 'user', message: current.question },
+            { author: 'robot', message: current.answer, error: current.error },
+          ]
+        }
+      )
+      setMessages(tempMessages)
     }
   }, [!isLoading])
-  console.log(tempMessages)
-  console.log(messages)
-
   return (
     <>
       <div style={{ marginBottom: '12.5rem' }}>
@@ -73,7 +71,9 @@ export default function Chat() {
                 side='left'
                 typing={current.typing}
                 loading={current.loading}
-                message={current.message}
+                message={
+                  current.error != null ? current.error : current.message
+                }
                 author={{ name: 'Robot', icon: <IconRobot />, color: 'blue' }}
               />
             )
@@ -84,7 +84,29 @@ export default function Chat() {
       <MessageInput submit={sendMessage} />
     </>
   )
-  function sendMessage(message: string) {
-    setMessages([...messages, { author: 'user', message: message }])
+  async function sendMessage(message: string) {
+    // setMessages([...messages, { author: 'user', message: message, loading: false, typing: false }])
+    messages.push({
+      author: 'user',
+      message: message,
+      loading: false,
+      typing: false,
+    })
+    var response = new EventSource('/api/chat/' + router.query.id + '/question?prompt=' + message.replaceAll(' ', '+'));
+
+    messages.push({ author: 'robot', message: '', loading: true, typing: true })
+    setMessages([...messages])
+    console.log(messages)
+    response.addEventListener("message", (event) => {
+      messages[messages.length - 1].loading = false;
+      messages[messages.length - 1].message = messages[messages.length - 1].message + event.data;
+      setMessages([...messages])
+      console.log(event);
+    })
+    response.addEventListener("close", (event) => {
+      response.close();
+      messages[messages.length - 1].typing = false;
+      setMessages([...messages])
+    })
   }
 }
