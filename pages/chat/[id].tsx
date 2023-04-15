@@ -3,7 +3,7 @@ import { MessageInput } from '@/components/messageInput'
 import { useMantineTheme } from '@mantine/core'
 import { IconUser, IconRobot } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, Component } from 'react'
 import useSWR from 'swr'
 
 export default function Chat() {
@@ -21,16 +21,19 @@ export default function Chat() {
 
   const router = useRouter()
 
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    // @ts-ignore
+    if (messagesEndRef.current) messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
   // @ts-ignore
   const fetcher = (...args) => fetch(...args).then(res => res.json())
   const { data, error, isLoading } = useSWR(
     '/api/chat/' + router.query.id,
     fetcher
   )
-  // const { data: test } = useSWR(
-  //   '/api/chat/' + router.query.id + '/question?prompt=Tell+me+about+the+James+Webb+Space+Telescope',
-  //   fetcher
-  // )
   var tempMessages: any[] = []
   useEffect(() => {
     if (messages != null && !isLoading && data != null) {
@@ -51,9 +54,10 @@ export default function Chat() {
       setMessages(tempMessages)
     }
   }, [!isLoading])
+  useEffect(() => {scrollToBottom()})
   return (
     <>
-      <div style={{ marginBottom: '12.5rem' }}>
+      <div style={{ marginBottom: '12.5rem', width: '100%' , marginLeft: 'auto', marginRight: 'auto', maxWidth: 'min(1300px, calc(100vw - var(--mantine-navbar-width)))', position: 'relative' }}>
         {messages.map((current, index) => {
           if (current.author == 'user') {
             return (
@@ -79,33 +83,37 @@ export default function Chat() {
             )
           }
         })}
+      <MessageInput submit={sendMessage} />
+      <div ref={messagesEndRef} />
       </div>
 
-      <MessageInput submit={sendMessage} />
     </>
   )
   async function sendMessage(message: string) {
-    // setMessages([...messages, { author: 'user', message: message, loading: false, typing: false }])
     messages.push({
       author: 'user',
       message: message,
       loading: false,
       typing: false,
-    })
-    var response = new EventSource('/api/chat/' + router.query.id + '/question?prompt=' + message.replaceAll(' ', '+'));
+    }) // Add the user's message to the list
+    messages.push({ author: 'robot', message: '', loading: true, typing: true }) // Add a new message to the list
+    setMessages([...messages]) // Causes the page re-render so that new message is displayed
+    var response = new EventSource(
+      '/api/chat/' + router.query.id + '/question?prompt=' + message.replaceAll(' ', '+')
+    ) // Send the user's message to the server and wait for a response
 
-    messages.push({ author: 'robot', message: '', loading: true, typing: true })
-    setMessages([...messages])
     console.log(messages)
-    response.addEventListener("message", (event) => {
-      messages[messages.length - 1].loading = false;
-      messages[messages.length - 1].message = messages[messages.length - 1].message + event.data;
+    response.addEventListener('message', event => {
+      messages[messages.length - 1].loading = false
+      messages[messages.length - 1].message =
+        messages[messages.length - 1].message + event.data
       setMessages([...messages])
-      console.log(event);
-    })
-    response.addEventListener("close", (event) => {
-      response.close();
-      messages[messages.length - 1].typing = false;
+      console.log(event)
+    }) // Handle the response from the server
+    response.addEventListener('close', () => {
+      response.close()
+      messages[messages.length - 1].typing = false
+      messages[messages.length - 1].typing = false
       setMessages([...messages])
     })
   }

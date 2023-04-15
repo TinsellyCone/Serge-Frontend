@@ -34,7 +34,7 @@ export function MessageInput({
         form.reset()
         submit(values.message)
       })}
-      style={{ position: 'fixed', bottom: '10px', left: '50%', width: '100%', transform: 'translate(-50%,-50%)' }}
+      style={{ position: 'fixed', bottom: '10px', left: 'calc(50% + var(--mantine-navbar-width) / 2)', width: 'calc(100% - var(--mantine-navbar-width))', transform: 'translate(-50%,-50%)' }}
       autoComplete='off'
     >
       <TextInput
