@@ -21,7 +21,7 @@ module.exports = {
     return [
       {
         source: '/api/:path*',
-        destination: sergeURL + '/api/:path*'
+        destination: sergeURL + '/api/:path*',
       }
     ]
   }

@@ -18,6 +18,7 @@ import {
   IconMessageChatbot,
   IconMessage,
   IconHome,
+  IconMessages,
 } from '@tabler/icons-react'
 import { UserButton } from './userButton'
 import { LinksGroup } from './navbarLinksGroup'
@@ -26,16 +27,16 @@ import { useEffect } from 'react'
 // import { Logo } from './Logo';
 
 const navdata = [
-  { label: 'Home', icon: IconHome, link: '/test' },
+  { label: 'Home', icon: IconHome, link: '/' },
   {
     label: 'Chats',
-    icon: IconMessage,
+    icon: IconMessages,
     initiallyOpened: true,
     links: [
-      { label: '13B', link: '/chat/6aa85d08-9050-49f7-bfba-5cf54dde6656' },
+      { label: '', link: '' },
     ],
   },
-  { label: 'Settings', icon: IconAdjustments },
+  { label: 'Settings', icon: IconAdjustments, link: '/settings' },
 ]
 
 const useStyles = createStyles(theme => ({
@@ -78,16 +79,20 @@ const useStyles = createStyles(theme => ({
 export default function NavbarNested() {
   const { classes } = useStyles()
   
+  var tempLinks: any[] = []
+
   // @ts-ignore
-  const fetcher = (...args) => fetch(...args).then(res => res.json())
+  const fetcher = (...args) => fetch(...args, {cache: 'no-cache'}).then(res => res.json())
   const { data, error, isLoading } = useSWR('/api/chat/', fetcher)
   if (!isLoading && data != null) {
-    data.map((item: { subtitle: string; id: string }) => {
-      navdata[1].links?.push({
-        label: item.subtitle,
+    data.map((item: { subtitle: string; id: string, model: string }) => {
+      tempLinks.push({
+        label: item.subtitle || item.model,
         link: `/chat/${item.id}`,
       })
     })
+    // @ts-ignore
+    navdata[1].links = tempLinks
   }
 
   const links = navdata.map(item => <LinksGroup {...item} key={item.label} />)

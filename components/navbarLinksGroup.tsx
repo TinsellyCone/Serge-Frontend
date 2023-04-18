@@ -8,8 +8,10 @@ import {
   UnstyledButton,
   createStyles,
   rem,
+  Menu,
 } from '@mantine/core';
-import { IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconCalendarStats, IconChevronLeft, IconChevronRight, IconTrash } from '@tabler/icons-react';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -55,28 +57,36 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
+  link?: string;
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: LinksGroupProps) {
+  const router = useRouter()
   const { classes, theme } = useStyles();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
   const items = (hasLinks ? links : []).map((link) => (
-    <Text<'a'>
-      component="a"
-      className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </Text>
+    <Menu trigger="hover" openDelay={200}>
+      <Menu.Target>
+        <Text<'a'>
+          component="a"
+          className={classes.link}
+          href={link.link}
+          key={link.label}
+        >
+          {link.label}
+        </Text>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item color='red' icon={<IconTrash size={14} />} onClick={() => {fetch('/api' + link.link, {method: 'DELETE'}); router.replace('/')}}>Delete</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   ));
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
+      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control} component='a' href={link}>
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
