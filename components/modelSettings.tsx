@@ -6,7 +6,8 @@ import {
   Button,
   Stack,
 } from '@mantine/core'
-import { UseFormReturnType, useForm } from '@mantine/form'
+import { useForm } from '@mantine/form'
+import { modals } from '@mantine/modals'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
@@ -18,7 +19,7 @@ export default function ModelSettings() {
   const fetcher = (...args) =>
   // @ts-ignore
     fetch(...args, { cache: 'no-cache' }).then(res => res.json())
-  const { data, error, isLoading } = useSWR('/api/model/installed', fetcher)
+  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_SERGE_URL + '/api/model/installed', fetcher)
   if (!isLoading && data != null) {
     data.map((item: string) => {
       installedModels.push({
@@ -198,7 +199,7 @@ export default function ModelSettings() {
   
     console.log(values)
     const response = await fetch(
-      '/api/chat/?temp=' +
+      process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/?temp=' +
         values.temperature +
         '&top_k=' +
         values.topK +
@@ -227,6 +228,7 @@ export default function ModelSettings() {
     ).then((response) => {
       response.json().then((data) => {
         console.log(data)
+        modals.closeAll()
         router.replace('/chat/' + data)
       })
     })

@@ -99,7 +99,7 @@ export default function Chat() {
     messages.push({ author: 'robot', message: '', loading: true, typing: true }) // Add a new message to the list
     setMessages([...messages]) // Causes the page re-render so that new message is displayed
     var response = new EventSource(
-      '/api/chat/' + router.query.id + '/question?prompt=' + message.replaceAll(' ', '+')
+      process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/' + router.query.id + '/question?prompt=' + message
     ) // Send the user's message to the server and wait for a response
 
     console.log(messages)

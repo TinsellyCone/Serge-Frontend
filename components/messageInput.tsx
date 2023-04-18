@@ -67,8 +67,3 @@ export function MessageInput({
     </form>
   )
 }
-
-function sendMessage(message?: string) {
-  if (!message) message = 'test'
-  console.log(message)
-}

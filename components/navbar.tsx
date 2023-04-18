@@ -83,7 +83,7 @@ export default function NavbarNested() {
 
   // @ts-ignore
   const fetcher = (...args) => fetch(...args, {cache: 'no-cache'}).then(res => res.json())
-  const { data, error, isLoading } = useSWR('/api/chat/', fetcher)
+  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/', fetcher)
   if (!isLoading && data != null) {
     data.map((item: { subtitle: string; id: string, model: string }) => {
       tempLinks.push({
