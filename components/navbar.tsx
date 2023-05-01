@@ -24,6 +24,7 @@ import { UserButton } from './userButton'
 import { LinksGroup } from './navbarLinksGroup'
 import useSWR from 'swr'
 import { useEffect } from 'react'
+import Image from 'next/image'
 // import { Logo } from './Logo';
 
 const navdata = [
@@ -83,7 +84,7 @@ export default function NavbarNested() {
 
   // @ts-ignore
   const fetcher = (...args) => fetch(...args, {cache: 'no-cache'}).then(res => res.json())
-  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/', fetcher)
+  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/', fetcher, { refreshInterval: 1000 })
   if (!isLoading && data != null) {
     data.map((item: { subtitle: string; id: string, model: string }) => {
       tempLinks.push({
@@ -108,6 +109,7 @@ export default function NavbarNested() {
     >
       <Navbar.Section className={classes.header}>
         <Group position='apart'>
+          <Image src={process.env.NEXT_PUBLIC_LOGO_URL as string} alt={process.env.NEXT_PUBLIC_SERVICE_NAME + ' Logo'} />
           {/* <Logo width={rem(120)} /> */}
           <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
         </Group>

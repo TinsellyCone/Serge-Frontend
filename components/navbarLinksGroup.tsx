@@ -67,7 +67,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
   const items = (hasLinks ? links : []).map((link) => (
-    <Menu trigger="hover" openDelay={200}>
+    <Menu trigger="hover" openDelay={200} key={link.label}>
       <Menu.Target>
         <Text<'a'>
           component="a"

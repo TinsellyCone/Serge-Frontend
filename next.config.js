@@ -17,12 +17,12 @@ const sergeURL = process.env.NEXT_PUBLIC_SERGE_URL
 
 module.exports = {
   reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: sergeURL + '/api/:path*',
-      }
-    ]
-  }
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: sergeURL + '/api/:path*',
+  //     }
+  //   ]
+  // }
 }

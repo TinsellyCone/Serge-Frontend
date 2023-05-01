@@ -31,7 +31,7 @@ export default function Chat() {
   // @ts-ignore
   const fetcher = (...args) => fetch(...args, {cache: 'no-cache'}).then(res => res.json())
   const { data, error, isLoading } = useSWR(
-    '/api/chat/' + router.query.id,
+    process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/' + router.query.id,
     fetcher
   )
   var tempMessages: any[] = []
@@ -67,6 +67,7 @@ export default function Chat() {
                 loading={current.loading}
                 message={current.message}
                 author={{ name: 'User', icon: <IconUser />, color: 'blue' }}
+                key={current.message}
               />
             )
           } else {
@@ -79,6 +80,7 @@ export default function Chat() {
                   current.error != null ? current.error : current.message
                 }
                 author={{ name: 'Robot', icon: <IconRobot />, color: 'blue' }}
+                key={current.message}
               />
             )
           }

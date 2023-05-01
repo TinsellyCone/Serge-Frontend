@@ -16,9 +16,9 @@ export default function Home() {
     <>
       <Center h={'100%'}>
         <Stack align='center' spacing={'lg'}>
-          <h1 style={{ margin: 0 }}>Welcome to Serge!</h1>
+          <h1 style={{ margin: 0 }}>Welcome to {process.env.NEXT_PUBLIC_SERVICE_NAME}!</h1>
           <h3 style={{ margin: 0 }}>
-            An easy way to chat with Alpaca & other LLaMa based models. 
+            {process.env.NEXT_PUBLIC_SERVICE_TAGLINE}
           </h3>
           <Flex gap={'sm'}>
             <Button
