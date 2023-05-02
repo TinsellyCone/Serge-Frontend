@@ -24,7 +24,7 @@ import { UserButton } from './userButton'
 import { LinksGroup } from './navbarLinksGroup'
 import useSWR from 'swr'
 import { useEffect } from 'react'
-import Image from 'next/image'
+import { Image } from '@mantine/core'
 // import { Logo } from './Logo';
 
 const navdata = [
@@ -109,8 +109,8 @@ export default function NavbarNested() {
     >
       <Navbar.Section className={classes.header}>
         <Group position='apart'>
-          <Image src={process.env.NEXT_PUBLIC_LOGO_URL as string} alt={process.env.NEXT_PUBLIC_SERVICE_NAME + ' Logo'} />
-          {/* <Logo width={rem(120)} /> */}
+          {/* @ts-ignore */}
+          <Image src={process.env.NEXT_PUBLIC_LOGO_URL as string} alt={process.env.NEXT_PUBLIC_SERVICE_NAME + ' Logo'} height={50} maw={190} fit={'contain'} withPlaceholder bgp={'left'} />
           <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
         </Group>
       </Navbar.Section>

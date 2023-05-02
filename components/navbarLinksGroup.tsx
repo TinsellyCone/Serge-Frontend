@@ -79,7 +79,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
         </Text>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item color='red' icon={<IconTrash size={14} />} onClick={() => {fetch('/api' + link.link, {method: 'DELETE'}); router.replace('/')}}>Delete</Menu.Item>
+        <Menu.Item color='red' icon={<IconTrash size={14} />} onClick={() => {fetch(process.env.NEXT_PUBLIC_SERGE_URL + '/api' + link.link, {method: 'DELETE'}); router.replace('/')}}>Delete</Menu.Item>
       </Menu.Dropdown>
     </Menu>
   ));

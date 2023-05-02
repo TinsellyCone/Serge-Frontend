@@ -11,18 +11,12 @@
 //   }
 // }
 
+const { default: next } = require('next')
+
 // module.exports = nextConfig
 
 const sergeURL = process.env.NEXT_PUBLIC_SERGE_URL
 
 module.exports = {
   reactStrictMode: true,
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/api/:path*',
-  //       destination: sergeURL + '/api/:path*',
-  //     }
-  //   ]
-  // }
 }
