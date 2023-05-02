@@ -4,20 +4,22 @@ import { AppShell, Flex, MantineProvider, ScrollArea } from '@mantine/core'
 import type { AppProps } from 'next/app'
 import useSWR from 'swr'
 import { ModalsProvider } from '@mantine/modals'
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
-  
+
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS withCSSVariables theme={{colorScheme: 'dark'}}>
-      <ModalsProvider>
-        <AppShell navbar={<NavbarNested />}>
-          {/* <Flex direction={'row'}> */}
-            {/* <NavbarNested /> */}
-            {/* <div style={{height: '100vh', width: 'var(--mantine-navbar-width)', minWidth: 'var(--mantine-navbar-width)', padding: '16px'}} />  This is a placeholder for the navbar to displace the rest of the content accordingly */}
-              <Component {...pageProps} />
-          {/* </Flex> */}
-        </AppShell>
-      </ModalsProvider>
-    </MantineProvider>
+    <>
+      <Head>
+        <link rel='icon' href={process.env.NEXT_PUBLIC_LOGO_URL} />
+      </Head>
+      <MantineProvider withGlobalStyles withNormalizeCSS withCSSVariables theme={{ colorScheme: 'dark' }}>
+        <ModalsProvider>
+          <AppShell navbar={<NavbarNested />}>
+            <Component {...pageProps} />
+          </AppShell>
+        </ModalsProvider>
+      </MantineProvider>
+    </>
   )
 }

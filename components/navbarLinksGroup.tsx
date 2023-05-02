@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconCalendarStats, IconChevronLeft, IconChevronRight, IconTrash } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -69,8 +70,8 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
   const items = (hasLinks ? links : []).map((link) => (
     <Menu trigger="hover" openDelay={200} key={link.label}>
       <Menu.Target>
-        <Text<'a'>
-          component="a"
+        <Text
+          component={Link}
           className={classes.link}
           href={link.link}
           key={link.label}
@@ -86,7 +87,8 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control} component='a' href={link}>
+      {/* @ts-ignore */}
+      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control} component={link ? Link : ''} href={link}>
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
@@ -108,29 +110,5 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: 
       </UnstyledButton>
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
-  );
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-};
-
-export function NavbarLinksGroup() {
-  return (
-    <Box
-      sx={(theme) => ({
-        minHeight: rem(220),
-        padding: theme.spacing.md,
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-      })}
-    >
-      <LinksGroup {...mockdata} />
-    </Box>
   );
 }
