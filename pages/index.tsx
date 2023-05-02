@@ -10,10 +10,14 @@ import {
   Textarea,
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import Head from 'next/head'
 
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>Home - {process.env.NEXT_PUBLIC_SERVICE_NAME}</title>
+      </Head>
       <Center h={'100%'}>
         <Stack align='center' spacing={'lg'}>
           <h1 style={{ margin: 0 }}>Welcome to {process.env.NEXT_PUBLIC_SERVICE_NAME}!</h1>

@@ -2,6 +2,7 @@ import Message from '@/components/message'
 import { MessageInput } from '@/components/messageInput'
 import { useMantineTheme } from '@mantine/core'
 import { IconUser, IconRobot } from '@tabler/icons-react'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useRef, Component } from 'react'
 import useSWR from 'swr'
@@ -57,6 +58,9 @@ export default function Chat() {
   useEffect(() => {scrollToBottom()})
   return (
     <>
+      <Head>
+        <title>Chat - {process.env.NEXT_PUBLIC_SERVICE_NAME}</title>
+      </Head>
       <div style={{ marginBottom: '12.5rem', width: '100%' , marginLeft: 'auto', marginRight: 'auto', maxWidth: 'min(1300px, calc(100vw - var(--mantine-navbar-width)))', position: 'relative' }}>
         {messages.map((current, index) => {
           if (current.author == 'user') {
