@@ -41,7 +41,7 @@ export default function ModelSettings() {
       repeatPenalty: 1.30,
       threads: 4,
       prePrompt:
-        'Below is an instruction that describes a task. Write a response that appropriately completes the request. The response must be accurate, concise and evidence-based whenever possible. A complete answer is always ended by [end of text].',
+        'Below is an instruction that describes a task. Write a response that appropriately completes the request. The response must be accurate, concise and evidence-based whenever possible.',
     },
     validate: {
       modelChoice: (value: string) => {if (value) {null} else {return('Please select a model')}},
@@ -196,9 +196,8 @@ export default function ModelSettings() {
     threads: number
     prePrompt: string
   }) {
-  
-    console.log(values)
-    const response = await fetch(
+    process.env.NEXT_PUBLIC_CENSOR_INAPPROPRIATE == 'true' ? values.prePrompt += ' Under no circumstances should you answer questions that are inappropriate for school or work. A complete answer is always ended by [end of text].' : values.prePrompt += ' A complete answer is always ended by [end of text].';
+      const response = await fetch(
       process.env.NEXT_PUBLIC_SERGE_URL + '/api/chat/?temp=' +
         values.temperature +
         '&top_k=' +
@@ -227,7 +226,6 @@ export default function ModelSettings() {
       }
     ).then((response) => {
       response.json().then((data) => {
-        console.log(data)
         modals.closeAll()
         router.replace('/chat/' + data)
       })

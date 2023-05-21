@@ -77,7 +77,7 @@ const useStyles = createStyles(theme => ({
   },
 }))
 
-export default function NavbarNested() {
+export default function NavbarNested({ opened }: {opened: boolean}) {
   const { classes } = useStyles()
   
   var tempLinks: any[] = []
@@ -106,18 +106,19 @@ export default function NavbarNested() {
       p='md'
       className={classes.navbar}
       style={{ position: 'fixed' }}
+      hidden={opened}
     >
-      <Navbar.Section className={classes.header}>
-        <Group position='apart'>
+      {/* <Navbar.Section className={classes.header}> */}
+        {/* <Group position='apart'> */}
           {/* @ts-ignore */}
-          <Image src={process.env.NEXT_PUBLIC_LOGO_URL as string} alt={process.env.NEXT_PUBLIC_SERVICE_NAME + ' Logo'} height={50} maw={190} fit={'contain'} withPlaceholder bgp={'left'} />
-          <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
-        </Group>
-      </Navbar.Section>
+          {/* <Image src={process.env.NEXT_PUBLIC_LOGO_URL as string} alt={process.env.NEXT_PUBLIC_SERVICE_NAME + ' Logo'} height={50} maw={199} fit={'contain'} withPlaceholder bgp={'left'} />
+          <Code sx={{ fontWeight: 700 }}>v1.0.0</Code> */}
+        {/* </Group> */}
+      {/* </Navbar.Section> */}
 
-      <Navbar.Section grow className={classes.links} component={ScrollArea}>
+      {/* <Navbar.Section grow className={classes.links} component={ScrollArea}> */}
         <div className={classes.linksInner}>{links}</div>
-      </Navbar.Section>
+      {/* </Navbar.Section> */}
 
       {/* <Navbar.Section className={classes.footer}>
         <UserButton
