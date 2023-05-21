@@ -41,7 +41,7 @@ export default function Message({
           p='sm'
           radius='lg'
           w='max-content'
-          maw='35%'
+          maw='65%'
         >
           {loading ? <Loader size={21} variant='bars' /> : <Text style={{overflowWrap: 'break-word'}}>
             {message}

@@ -38,7 +38,7 @@ export function MessageInput({
       autoComplete='off'
     >
       <TextInput
-        w={'calc(100% - 12.5rem)'}
+        w={'calc(100% - 4rem)'}
         maw={700}
         ref={focusTrapRef}
         radius='xl'
